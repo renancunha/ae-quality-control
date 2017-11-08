@@ -1,5 +1,5 @@
 function svm_model_add_class(modelName, classPathOne, classPathTwo, ...
-    listOfStatistics, stWin, stStep, mtWin, mtStep)
+    listOfStatistics, stWin, stStep, mtWin, mtStep, kernel_func)
 
 %
 % function svm_model_add_class(modelName, className, classPath, ...
@@ -76,7 +76,7 @@ Group = zeros(size(F1, 1) + size(F2, 1), 1);
 Group(1:size(F1, 1)) = 1;
 Group(size(F1, 1)+1:size(F1, 1)+size(F2, 1)) = 2;
 
-SVMStruct = svmtrain(Training,Group, 'kernel_function', 'mlp');
+SVMStruct = svmtrain(Training,Group, 'kernel_function', kernel_func);
 save(modelName, 'Training', 'Group', 'SVMStruct');
 
 

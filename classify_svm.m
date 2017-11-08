@@ -1,10 +1,9 @@
-function [ accuraccy, TP, FP, TN, FN ] = classify_knn( PATH_TRAIN, PATH_TEST, stWin, stStep, mtWin, mtStep, Statistics, K )
+function [ accuraccy, TP, FP, TN, FN ] = classify_svm( PATH_TRAIN, PATH_TEST, stWin, stStep, mtWin, mtStep, Statistics, kernel_func )
 
-    MODEL_NAME = ['knn_' datestr(now,'ddmmyyyy_HHMMSSFFF') '.mat'];
+    MODEL_NAME = ['svm_' datestr(now,'ddmmyyyy_HHMMSSFFF') '.mat'];
     MODEL_PATH = ['models\' MODEL_NAME];
     
-    kNN_model_add_class(MODEL_PATH, 'good', [PATH_TRAIN 'good'], Statistics, stWin, stStep, mtWin, mtStep);
-    kNN_model_add_class(MODEL_PATH, 'bad', [PATH_TRAIN 'bad'], Statistics, stWin, stStep, mtWin, mtStep);           
+    svm_model_add_class(MODEL_PATH, [PATH_TRAIN 'good'], [PATH_TRAIN 'bad'], Statistics, stWin, stStep, mtWin, mtStep, kernel_func);      
 
     correct_predictions = 0;
     wrong_predictions = 0;
@@ -17,8 +16,7 @@ function [ accuraccy, TP, FP, TN, FN ] = classify_knn( PATH_TRAIN, PATH_TEST, st
     files_to_test = dir(PATH_TEST);
     files_to_test(1) = []; files_to_test(1) = [];
 
-    [Features, ClassNames, MEAN, STD, Statistics, ...
-        stWin, stStep, mtWin, mtStep] = kNN_model_load(MODEL_PATH);
+    load(MODEL_PATH);
 
     for l = 1:length(files_to_test)
         [y, Fs] = wavread([PATH_TEST files_to_test(l).name]);
@@ -27,7 +25,7 @@ function [ accuraccy, TP, FP, TN, FN ] = classify_knn( PATH_TRAIN, PATH_TEST, st
         mtStepRatio = mtStep/stStep;
         [mtFeatures] = mtFeatureExtraction(stF, mtWinRatio, mtStepRatio, Statistics);
         mtFeatures = mean(mtFeatures, 2);
-        [P, label] = classifyKNN_D_Multi(Features, (mtFeatures - MEAN') ./ STD', K, 1);
+        label = svmclassify(SVMStruct,mtFeatures');
 
         if(strfind(files_to_test(l).name, 'b'))
             if(label == 1)
