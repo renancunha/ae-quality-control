@@ -1,12 +1,14 @@
-clear;
-
-% prepare datasets
-[PATH_TRAIN, PATH_VALIDATION, PATH_TEST] = randomize_samples('samples/ceramic_tiles/good/', ...
-                                                              'samples/ceramic_tiles/bad/', ...
-                                                              'test_0711/', ...
-                                                              0.6, 0.2, 0.2);
+% %clear;
+% 
+% % prepare datasets
+% [PATH_TRAIN, PATH_VALIDATION, PATH_TEST] = randomize_samples('samples/ceramic_tiles/good/', ...
+%                                                              'samples/ceramic_tiles/bad/', ...
+%                                                              'test_0711/', ...
+%                                                              0.6, 0.2, 0.2);
 
 stWin = 0.010; stStep = 0.010;
+
+
 mtWin = 0.1; mtStep = 0.1;
 Statistics = {'mean', 'median', 'std', 'stdbymean', 'max', 'min'};
 Ks = [1 2 4 3 5 10 15 20];

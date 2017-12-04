@@ -77,11 +77,11 @@ Group(1:size(F1, 1)) = 1;
 Group(size(F1, 1)+1:size(F1, 1)+size(F2, 1)) = 2;
 
 [ ranking , w] = reliefF( Training, Group, size(Training, 2));
-% ranking = 1:size(Training, 2);
+ranking = 1:size(Training, 2);
 
-% SVMStruct = svmtrain(Training ,Group, 'kernel_function', kernel_func);
-SVMStruct = svmtrain(Training(:, ranking(1:k_features)) ,Group, 'kernel_function', kernel_func);
-save(modelName, 'Training', 'Group', 'SVMStruct', 'ranking');
-% save(modelName, 'Training', 'Group', 'SVMStruct');
+SVMStruct = svmtrain(Training ,Group, 'kernel_function', kernel_func);
+%SVMStruct = svmtrain(Training(:, ranking(1:k_features)) ,Group, 'kernel_function', kernel_func);
+%save(modelName, 'Training', 'Group', 'SVMStruct', 'ranking');
+save(modelName, 'Training', 'Group', 'SVMStruct');
 
 

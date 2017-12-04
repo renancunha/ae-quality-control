@@ -5,7 +5,7 @@ function [ accuraccy, TP, FP, TN, FN ] = classify_knn( PATH_TRAIN, PATH_TEST, st
     
     kNN_model_add_class(MODEL_PATH, 'good', [PATH_TRAIN 'good'], Statistics, stWin, stStep, mtWin, mtStep);
     kNN_model_add_class(MODEL_PATH, 'bad', [PATH_TRAIN 'bad'], Statistics, stWin, stStep, mtWin, mtStep);           
-
+    
     correct_predictions = 0;
     wrong_predictions = 0;
     

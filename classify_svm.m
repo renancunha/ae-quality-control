@@ -1,9 +1,9 @@
-function [ accuraccy, TP, FP, TN, FN ] = classify_svm( PATH_TRAIN, PATH_TEST, stWin, stStep, mtWin, mtStep, Statistics, kernel_func )
+function [ accuraccy, rank ] = classify_svm( PATH_TRAIN, PATH_TEST, stWin, stStep, mtWin, mtStep, Statistics, kernel_func, k_features )
 
     MODEL_NAME = ['svm_' datestr(now,'ddmmyyyy_HHMMSSFFF') '.mat'];
     MODEL_PATH = ['models\' MODEL_NAME];
     
-    svm_model_add_class(MODEL_PATH, [PATH_TRAIN 'good'], [PATH_TRAIN 'bad'], Statistics, stWin, stStep, mtWin, mtStep, kernel_func);      
+    svm_model_add_class(MODEL_PATH, [PATH_TRAIN 'good'], [PATH_TRAIN 'bad'], Statistics, stWin, stStep, mtWin, mtStep, kernel_func, k_features);      
 
     correct_predictions = 0;
     wrong_predictions = 0;
@@ -17,7 +17,9 @@ function [ accuraccy, TP, FP, TN, FN ] = classify_svm( PATH_TRAIN, PATH_TEST, st
     files_to_test(1) = []; files_to_test(1) = [];
 
     load(MODEL_PATH);
-
+    rank = ranking;
+%     rank = 0;
+    
     for l = 1:length(files_to_test)
         [y, Fs] = wavread([PATH_TEST files_to_test(l).name]);
         stF = stFeatureExtraction(y, Fs, stWin, stStep);
@@ -25,7 +27,10 @@ function [ accuraccy, TP, FP, TN, FN ] = classify_svm( PATH_TRAIN, PATH_TEST, st
         mtStepRatio = mtStep/stStep;
         [mtFeatures] = mtFeatureExtraction(stF, mtWinRatio, mtStepRatio, Statistics);
         mtFeatures = mean(mtFeatures, 2);
-        label = svmclassify(SVMStruct,mtFeatures');
+        
+        features = mtFeatures';
+%         label = svmclassify(SVMStruct, features);
+        label = svmclassify(SVMStruct, features(ranking(1:k_features)));
 
         if(strfind(files_to_test(l).name, 'b'))
             if(label == 1)
@@ -47,7 +52,6 @@ function [ accuraccy, TP, FP, TN, FN ] = classify_svm( PATH_TRAIN, PATH_TEST, st
 
     end;
 
-    
     accuraccy = (TP+TN)/(TP+TN+FP+FN);
 end
 
