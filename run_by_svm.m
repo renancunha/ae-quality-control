@@ -14,7 +14,7 @@ Statistics = {'mean', 'median', 'std', 'stdbymean', 'max', 'min'};
 Kernels = {'linear', 'quadratic', 'polynomial', 'rbf', 'mlp'};
 
 % feature selection
-k_features = 20;
+k_features = 210;
 
 TUNNING_RESULTS = [];
 for i = 1 : length(Kernels)

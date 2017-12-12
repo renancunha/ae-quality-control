@@ -17,8 +17,8 @@ function [ accuraccy, rank ] = classify_svm( PATH_TRAIN, PATH_TEST, stWin, stSte
     files_to_test(1) = []; files_to_test(1) = [];
 
     load(MODEL_PATH);
-    rank = ranking;
-%     rank = 0;
+%     rank = ranking;
+    rank = 0;
     
     for l = 1:length(files_to_test)
         [y, Fs] = wavread([PATH_TEST files_to_test(l).name]);
@@ -29,8 +29,8 @@ function [ accuraccy, rank ] = classify_svm( PATH_TRAIN, PATH_TEST, stWin, stSte
         mtFeatures = mean(mtFeatures, 2);
         
         features = mtFeatures';
-%         label = svmclassify(SVMStruct, features);
-        label = svmclassify(SVMStruct, features(ranking(1:k_features)));
+        label = svmclassify(SVMStruct, features);
+%         label = svmclassify(SVMStruct, features(ranking(1:k_features)));
 
         if(strfind(files_to_test(l).name, 'b'))
             if(label == 1)
